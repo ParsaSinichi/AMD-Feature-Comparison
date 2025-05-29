@@ -1,4 +1,4 @@
-# Comparison of handcrafted feature and deep features extracted from RETFound and RETFound green
+# Comparison of Classical and Deep Learning-Based Feature Representations for Age-Related Macular Degeneration
 
 ## Introduction
 
@@ -10,10 +10,9 @@ The study compares the performance of classical feature extraction methods and d
 
 ### Classical Feature Extraction Methods
 
-1. **Histogram of Oriented Gradients (HOG):** Captures local intensity gradients and edge directions.
-2. **Local Binary Patterns (LBP):** Analyzes texture by comparing each pixel with its neighbors.
-3. **Gray Level Co-occurrence Matrix (GLCM):** Measures the spatial relationship of gray levels in an image.
-4. **Discrete Wavelet Transform (DWT):** Decomposes images into multiple resolution levels to capture features at different scales.
+1. **Local Binary Patterns (LBP):** Analyzes texture by comparing each pixel with its neighbors.
+2. **Gray Level Co-occurrence Matrix (GLCM):** Measures the spatial relationship of gray levels in an image.
+3. **Discrete Wavelet Transform (DWT):** Decomposes images into multiple resolution levels to capture features at different scales.
 
 ### Deep Learning Models
 
@@ -23,7 +22,6 @@ The study compares the performance of classical feature extraction methods and d
 ### Classifiers
 
 - **Logistic Regression (LR)**
-- **Support Vector Machine (SVM)**
 
 These classifiers were applied to both the features extracted by classical methods and the features extracted by the deep learning models.
 
