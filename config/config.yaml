@@ -1,0 +1,9 @@
+label_map:
+  Non-AMD: 0
+  AMD: 1
+
+dataset_path: 
+output_path: 
+sets: [test,train]
+rfg_model_path :  # .pth path for RETFound model, you can downlaod it from :  https://github.com/justinengelmann/RETFound_Green
+rf_model_path :  # .pth path for RETFound-green model, you can downlaod it from :  https://github.com/rmaphoh/RETFound_MAE
