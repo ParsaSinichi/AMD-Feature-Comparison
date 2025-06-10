@@ -36,6 +36,14 @@ Project/
 │       └── config.yaml
 ```
 
+### Downloading Weights
+
+To use RETFound and RETFound-Green, you need to download their weights and specify their paths in the `config.yaml` file.
+
+[Download RETFound](https://github.com/rmaphoh/RETFound_MAE)
+
+[Downlaod RETFound-green](https://github.com/justinengelmann/RETFound_Green)
+
 ### Running the Code
 
 Execute the main script `main.py` with the feature extractor(s) of your choice. Use the `--features` argument followed by one or more feature extractor names.
