@@ -1,12 +1,8 @@
 import os
 import yaml
 import torch
-import numpy as np
 from PIL import Image
-from tqdm import tqdm
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
-import timm
+from torchvision import transforms
 import models_vit
 
 with open('config/config.yaml', 'r') as file:
@@ -34,7 +30,7 @@ _ = retfound_model.load_state_dict(checkpoint['model'], strict=False)
 retfound_model.to(device)
 
 
-def rf_extract_features(image_path):
+def extract_rf_features(image_path):
     image = Image.open(image_path).convert('RGB')
     input_tensor = image_transform(image).unsqueeze(0).to(device)
     with torch.no_grad():

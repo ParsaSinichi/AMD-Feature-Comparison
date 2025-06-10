@@ -18,7 +18,7 @@ transform = transforms.Compose([
     transforms.Normalize(mean=[0.5]*3, std=[0.5]*3)
 ])
 
-def rfg_extract_features(image_path):
+def extract_rfg_features(image_path):
     image = Image.open(image_path).convert('RGB')
     tensor = transform(image).unsqueeze(0).to(device)
     with torch.no_grad():
