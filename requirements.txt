@@ -1,0 +1,11 @@
+numpy
+matplotlib
+pyfeats
+scikit-learn
+pyradiomics
+timm
+torch=2.4.1
+torchvision=0.16.1
+scikit-image
+opencv-python
+seaborn
