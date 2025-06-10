@@ -1,26 +1,30 @@
-from classical_features.dwt import extract_dwt_features
-# from classical_features.glcm import extract_glcm_features
-from classical_features.lbp import extract_lbp_features
-from deep_featuers.retfound_feature_extraction import rf_extract_features
-from deep_featuers.retfound_green_feature_extraction import rfg_extract_features
+
 import argparse
 import yaml
 import numpy as np
-from collections import defaultdict
 from tqdm import tqdm
+import importlib
+
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from util.dataset import dataset_part, get_label_from_path, calculate_class_weights
-from util.metrics import evaluate_model, plot_roc, plot_confusion_matrix
-FEATURE_EXTRACTORS = {
-    'dwt': extract_dwt_features,
-    # 'glcm': extract_glcm_features,
-    'lbp': extract_lbp_features,
-    'rf': rf_extract_features,
-    'rfg': rfg_extract_features,
+from utils.dataset import dataset_part, get_label_from_path, calculate_class_weights
+from utils.metrics import evaluate_model, plot_roc, plot_confusion_matrix
+
+FEATURE_MODULES = {
+    'dwt': 'classical_features.dwt',
+    'glcm': 'classical_features.glcm',
+    'lbp': 'classical_features.lbp',
+    'rf': 'deep_featuers.retfound_feature_extraction',
+    'rfg': 'deep_featuers.retfound_green_feature_extraction',
 }
-
-
+def load_feature_extractors(selected_features):
+    extractors = {}
+    for feat in selected_features:
+        module_path = FEATURE_MODULES[feat]
+        module = importlib.import_module(module_path)
+        extract_func = getattr(module, f"extract_{feat}_features")
+        extractors[feat] = extract_func
+    return extractors
 def prepare_data(feat_dict, scaler_type='minmax'):
     X_train = np.array([sample['feat'] for sample in feat_dict["Train"]])
     y_train = np.array([sample['label'] for sample in feat_dict["Train"]])
@@ -41,28 +45,36 @@ def prepare_data(feat_dict, scaler_type='minmax'):
     return X_train, y_train, X_test, y_test
 
 
-def extract_features(image_paths, feat_list, label_map):
+def extract_features(image_paths, feat_list, label_map, feature_extractors):
     features_dict = {}
     for split, paths in image_paths.items():
         split_features = []
         for image_path in tqdm(paths, desc=f"Extracting features for {split}"):
             combined_features = []
             for feat in feat_list:
-                combined_features.extend(FEATURE_EXTRACTORS[feat](image_path))
+                if feat not in feature_extractors:
+                    raise ValueError(f"Feature extractor for '{feat}' not found.")
+                combined_features.extend(feature_extractors[feat](image_path))
             label = get_label_from_path(image_path, label_map)
             split_features.append({'feat': combined_features, 'label': label})
         features_dict[split] = split_features
     return features_dict
 
 
+
+
 with open('config/config.yaml', 'r') as f:
     config = yaml.safe_load(f)
 image_paths = dataset_part()
 parser = argparse.ArgumentParser(description="LBP feature extractor")
-parser.add_argument('--features_dict', nargs='+', default=['dwt', 'lbp'])
+parser.add_argument('--features_dict', nargs='+', default=['dwt', 'lbp','rf', 'rfg'])
 args = parser.parse_args()
+FEATURE_EXTRACTORS = load_feature_extractors(args.features_dict)
+
 feat_dict = extract_features(
-    image_paths, args.features_dict, config['label_map'])
+    image_paths, args.features_dict, config['label_map'],FEATURE_EXTRACTORS)
+
+
 X_train, y_train, X_test, y_test = prepare_data(
     feat_dict, scaler_type='standard')
 
