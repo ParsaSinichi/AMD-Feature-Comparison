@@ -36,6 +36,16 @@ Project/
 │       └── config.yaml
 ```
 
+### Preprocessing
+
+To apply CLAHE (Contrast-Limited Adaptive Histogram Equalization) to your dataset, you only need to run `utils/clahe.py`
+
+Examples:
+
+```console
+utils/clahe.py --input_folder Dataset/  --output_folder dataset_clahe/
+```
+
 ### Downloading Weights
 
 To use RETFound and RETFound-Green, you need to download their weights and specify their paths in the `config.yaml` file.
